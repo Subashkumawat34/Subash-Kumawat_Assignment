@@ -1,0 +1,90 @@
+.game-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.game-modal {
+  background: #1e1e2d;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s ease;
+}
+
+.game-modal h2 {
+  margin-top: 0;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.won_pattern_1 h2, .won_game h2 {
+  color: #2ed573;
+}
+
+.lose h2 {
+  color: #ff4757;
+}
+
+.score-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f1c40f;
+  margin: 15px 0;
+}
+
+.reason {
+  color: #a4b0be;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.transition-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #1e90ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}

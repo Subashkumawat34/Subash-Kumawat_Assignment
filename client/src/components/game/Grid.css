@@ -1,0 +1,18 @@
+.grid-container {
+  display: grid;
+  gap: 1px; /* Crisp borders */
+  width: 100%;
+  max-width: 600px; /* Wider so columns are legible */
+  background: #000;
+  border: 1px solid #000;
+  margin: 0 auto;
+  user-select: none;
+  touch-action: none;
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    max-width: 100%;
+    margin-top: 0;
+  }
+}

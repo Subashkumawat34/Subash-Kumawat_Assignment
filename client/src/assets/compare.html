@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background: #333; color: white; display: flex; font-family: sans-serif; height: 100vh; margin: 0; }
+    .half { width: 50%; padding: 10px; display: flex; flex-direction: column; }
+    iframe, video { flex: 1; width: 100%; border: 2px solid #555; }
+  </style>
+</head>
+<body>
+  <div class="half">
+    <h2>REFERENCE VIDEOS</h2>
+    <video src="que_01_pattern_01.mp4" autoplay loop muted></video>
+    <video src="que_02_pattern_02.mp4" autoplay loop muted></video>
+  </div>
+  <div class="half">
+    <h2>MY IMPLEMENTATION</h2>
+    <iframe src="http://localhost:5173/play/grid"></iframe>
+  </div>
+</body>
+</html>

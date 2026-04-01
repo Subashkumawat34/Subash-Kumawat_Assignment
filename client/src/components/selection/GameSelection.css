@@ -1,0 +1,386 @@
+/* ================================================
+   GAME SELECTION — ARCADE KIOSK (VIDEO-MATCHED)
+   ================================================ */
+
+/* Outer page fills full viewport, black bg */
+.game-selection-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+/* The "arcade screen" bezel */
+.game-selection-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(ellipse at 50% 35%, #1e1e32 0%, #0e0e1e 55%, #000 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 1px #000,
+    0 0 50px rgba(30, 100, 255, 0.2),
+    inset 0 0 80px rgba(0, 0, 0, 0.5);
+}
+
+/* ---- Corner bracket decorations ---- */
+.corner-tl, .corner-tr, .corner-bl, .corner-br {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  z-index: 30;
+  pointer-events: none;
+}
+.corner-tl { top: 7px; left: 7px;   border-top: 2px solid rgba(255,255,255,0.45); border-left:  2px solid rgba(255,255,255,0.45); }
+.corner-tr { top: 7px; right: 7px;  border-top: 2px solid rgba(255,255,255,0.45); border-right: 2px solid rgba(255,255,255,0.45); }
+.corner-bl { bottom: 7px; left: 7px;  border-bottom: 2px solid rgba(255,255,255,0.45); border-left:  2px solid rgba(255,255,255,0.45); }
+.corner-br { bottom: 7px; right: 7px; border-bottom: 2px solid rgba(255,255,255,0.45); border-right: 2px solid rgba(255,255,255,0.45); }
+
+/* ---- HEADER ---- */
+.selection-header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px 6px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.header-icon-left,
+.header-icon-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.75;
+  color: white;
+}
+.header-icon-left  { left: 14px; }
+.header-icon-right { right: 14px; }
+
+/* 3×3 dot grid icon */
+.grid-icon {
+  display: grid;
+  grid-template-columns: repeat(3, 5px);
+  gap: 2.5px;
+}
+.grid-icon span {
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 1px;
+  display: block;
+}
+
+/* Hamburger icon */
+.menu-icon { display: flex; flex-direction: column; gap: 3px; }
+.menu-icon span { display: block; height: 2px; background: white; border-radius: 2px; }
+.menu-icon span:nth-child(1) { width: 18px; }
+.menu-icon span:nth-child(2) { width: 13px; }
+.menu-icon span:nth-child(3) { width: 18px; }
+
+/* Title with chamfered border */
+.selection-title {
+  font-size: clamp(0.65rem, 1.8vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+  padding: 5px 30px;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+}
+
+/* ---- CAROUSEL ---- */
+.carousel-section {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Nav arrows — inside action row */
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.nav-btn:hover { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(255,255,255,0.6)); }
+
+/* Carousel track — the pivot point for card positioning */
+.carousel-track {
+  position: relative;
+  width: 75%;
+  max-width: 800px;
+  height: 85%;
+}
+
+/* ---- GAME CARD ---- */
+.game-card {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: #0a0a14;
+}
+
+/* Side card transforms */
+.game-card.prev   { transform: scale(0.62) translateX(-120%); filter: brightness(0.5); opacity: 0.9; }
+.game-card.next   { transform: scale(0.62) translateX(120%);  filter: brightness(0.5); opacity: 0.9; }
+.game-card.hidden { transform: scale(0.3);  opacity: 0; pointer-events: none; }
+.game-card.active { transform: scale(1) translateX(0); opacity: 1; filter: none; }
+
+/* Image container fills entire card */
+.card-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Thumbnail — normal for side cards */
+.game-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.4s ease;
+}
+
+/* KEY: heavily blur the active card image — only content text shows clearly */
+.thumbnail-blurred {
+  filter: blur(6px) brightness(0.35) saturate(0.6);
+  transform: scale(1.08); /* slight scale-up to hide blur edges */
+}
+
+/* Strong dark scrim over the blurred active image */
+.card-active-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+/* Bottom gradient for side cards */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+  z-index: 1;
+}
+
+/* ---- Active card text overlays ---- */
+
+/* Green angled HOW TO PLAY pill at top */
+.how-to-play-badge {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) skewX(-6deg);
+  background: #00d632;
+  color: #000;
+  font-size: clamp(0.42rem, 1vw, 0.58rem);
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 3px 20px;
+  white-space: nowrap;
+  z-index: 10;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+/* Centred "HOW TO PLAY + GAME NAME" on the blurred image */
+.how-to-play-text-overlay {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  width: 90%;
+  pointer-events: none;
+}
+
+.how-to-play-label {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.93);
+  color: #000;
+  font-size: clamp(0.48rem, 1.1vw, 0.62rem);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 18px;
+  margin-bottom: 6px;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+
+.how-to-play-game-name {
+  display: block;
+  color: #ffffff;
+  font-size: clamp(1.1rem, 3.5vw, 1.85rem);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 1), 0 0 40px rgba(0,0,0,0.8);
+  line-height: 1.1;
+}
+
+/* ---- Bottom info bar (active card) ---- */
+.card-footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px 9px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+  z-index: 10;
+  gap: 6px;
+}
+
+.card-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.game-icon-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.card-game-title {
+  font-size: clamp(0.6rem, 1.6vw, 0.88rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+  white-space: nowrap;
+}
+
+.card-footer-stats {
+  font-size: clamp(0.4rem, 0.95vw, 0.58rem);
+  font-weight: 700;
+  color: #7dd3fc;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  text-align: right;
+}
+.card-footer-stats span { margin-left: 5px; }
+.card-footer-stats strong { color: #fff; }
+
+/* ---- Side card name label ---- */
+.side-card-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  text-align: center;
+  font-size: clamp(0.5rem, 1.1vw, 0.65rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+  z-index: 5;
+  padding: 5px 8px;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+/* ---- START GAME & NAVIGATION ---- */
+.action-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px 30px;
+  z-index: 20;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.start-game-btn {
+  color: white;
+  padding: clamp(10px, 1.8vh, 16px) clamp(40px, 8vw, 80px);
+  border-radius: 8px;
+  font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border: 4px solid rgba(130, 180, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #113669; /* Solid deep blue */
+  box-shadow: 0 0 20px rgba(30, 110, 245, 0.4), inset 0 0 10px rgba(255,255,255,0.1);
+}
+.start-game-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+  box-shadow: 0 0 30px rgba(30, 110, 245, 0.7), inset 0 0 20px rgba(255,255,255,0.2);
+}
+
+/* ---- VIDEO MODAL (preview still accessible from code) ---- */
+.video-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  display: flex; justify-content: center; align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+.video-modal-content {
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  width: 100%; max-width: 800px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  padding: 20px;
+}
+.close-btn {
+  position: absolute; top: 15px; right: 20px;
+  background: none; border: none; color: white;
+  font-size: 2rem; cursor: pointer; z-index: 10;
+  transition: transform 0.2s ease;
+}
+.close-btn:hover { transform: scale(1.2) rotate(90deg); color: #10b981; }
+.modal-title {
+  margin-bottom: 15px; padding-right: 40px;
+  font-size: 1.2rem; color: #94a3b8;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+.video-wrapper { border-radius: 12px; overflow: hidden; background: #000; display: flex; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .carousel-track { width: 85%; max-width: none; }
+  .card-footer-stats { display: none; }
+  .how-to-play-game-name { font-size: 1.1rem; }
+}

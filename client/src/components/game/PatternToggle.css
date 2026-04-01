@@ -1,0 +1,33 @@
+.pattern-toggle-container {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pattern-btn {
+  flex: 1;
+  padding: 8px 16px;
+  text-align: center;
+  cursor: pointer;
+  color: #ccc;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.pattern-btn:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pattern-btn.active {
+  background: #1e90ff;
+  color: white;
+  font-weight: bold;
+}
+
+.pattern-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
