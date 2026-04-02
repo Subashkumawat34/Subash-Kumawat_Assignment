@@ -9,6 +9,14 @@ const scoreSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please add a score'],
     },
+    gameId: {
+        type: String,
+        default: 'grid'
+    },
+    details: {
+        type: Object,
+        default: {}
+    },
     timeElapsed: {
         type: Number,
     },

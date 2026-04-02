@@ -17,8 +17,8 @@ const getLeaderboard = async (req, res, next) => {
 // @route   POST /api/scores
 const createScore = async (req, res, next) => {
     try {
-        const { playerName, score, timeElapsed, clicks } = req.body;
-
+        const { playerName, score, timeElapsed, clicks, gameId, details } = req.body;
+ 
         if (!playerName || score === undefined || score === null) {
             res.status(400);
             throw new Error('Please include player name and score');
@@ -28,7 +28,9 @@ const createScore = async (req, res, next) => {
             playerName,
             score,
             timeElapsed,
-            clicks
+            clicks,
+            gameId: gameId || 'grid',
+            details: details || {}
         });
 
         res.status(201).json(newScore);

@@ -18,6 +18,7 @@ const initialState = {
   rows: 30,
   cols: 10,
   grid: [],
+  baseGrid: [],
   score: 0,
   lives: 5,
   timeLeft: 30,
@@ -46,6 +47,7 @@ function gameReducer(state, action) {
         rows: r,
         cols: c,
         grid: newGrid,
+        baseGrid: newGrid,
         score: isPattern2 ? state.score : 0, 
         lives: isPattern2 ? state.lives : 5, 
         timeLeft: isPattern2 ? 30 : 30, // Reset timer for each pattern
@@ -71,19 +73,9 @@ function gameReducer(state, action) {
       
       const newTickCount = state.tickCount + 1;
       
-      // We process the 1D animGrid array
-      const animGrid = [...state.grid.map(tile => ({ ...tile }))];
+      // We process the 1D baseGrid array to derive the visual grid
+      const animGrid = [...state.baseGrid.map(tile => ({ ...tile }))];
       
-      // Clear out old OBSTACLE tiles
-      for (let i = 0; i < animGrid.length; i++) {
-        if (animGrid[i].type === 'OBSTACLE') {
-          // If the tile was clicked to blink, passing the wave clears it.
-          // This ensures visually correct representation of "moving" tiles.
-          animGrid[i].type = 'EMPTY';
-          animGrid[i].isBlinking = false;
-        }
-      }
-
       const activePattern = state.currentPattern === 1 ? getRedPattern1(state.cols) : getRedPattern2(state.cols);
 
       // Draw shifted RED tiles mapped onto the 1D array
@@ -96,8 +88,8 @@ function gameReducer(state, action) {
           if (c >= state.cols || c < 0) return; // bounds safety
           const idx = r * state.cols + c;
           
-          // Ensure we don't overwrite fixed BLUE or GREEN tiles
-          if (animGrid[idx] && animGrid[idx].type === 'EMPTY') {
+          // "Red Priority": OBSTACLE overwrites anything
+          if (animGrid[idx]) {
             animGrid[idx].type = 'OBSTACLE';
           }
         });
@@ -114,7 +106,7 @@ function gameReducer(state, action) {
     case 'LOSE_GAME':
       return { ...state, status: 'LOSE', loseReason: action.payload || state.loseReason };
     case 'RESET':
-      return { ...initialState, playerName: state.playerName, rows: state.rows, cols: state.cols };
+      return { ...initialState, playerName: state.playerName, rows: state.rows, cols: state.cols, baseGrid: [] };
     default:
       return state;
   }
