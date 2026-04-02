@@ -20,7 +20,7 @@ export default function GameSelection() {
   useKeyboard({
     ArrowRight: nextGame,
     ArrowLeft: prevGame,
-    Enter: () => navigate(`/play/${games[activeIndex].id}`),
+    Enter: () => navigate('/play'),
   });
 
   const swipeHandlers = useSwipe({
@@ -94,7 +94,7 @@ export default function GameSelection() {
 
           <button
             className="start-game-btn"
-            onClick={() => navigate(`/play/${activeGame.id}`)}
+            onClick={() => navigate('/play')}
           >
             START GAME
           </button>
