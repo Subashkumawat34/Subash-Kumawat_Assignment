@@ -32,9 +32,10 @@ if (process.env.NODE_ENV === 'production' || true) { // Defaulting to true for a
     app.use(express.static(clientDistPath));
 
     // CATCH-ALL: Fixes the "reload" issue by sending index.html for all non-API routes
-    app.get('*', (req, res) => {
-        // Exclude /api routes from catch-all just in case
-        if (!req.url.startsWith('/api')) {
+    // In Express 5, the wildcard must be named (e.g., *all)
+    app.get('*all', (req, res) => {
+        // Only serve index.html if it's NOT an API route
+        if (!req.path.startsWith('/api')) {
             res.sendFile(path.join(clientDistPath, 'index.html'));
         }
     });
